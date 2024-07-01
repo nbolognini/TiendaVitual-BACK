@@ -1,0 +1,24 @@
+CREATE DATABASE IF NOT EXISTS tiendavirtual;
+USE tiendavirtual;
+
+CREATE TABLE IF NOT EXISTS productos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(30) NOT NULL,
+    precio DECIMAL(10,2),
+    stock INT
+);
+
+INSERT INTO productos (nombre, precio, cantidad)
+VALUES
+('campera', 1000.50, 2),
+('campera', 200.75, 3),
+('remera', 300.25, 34),
+('remera', 400.00, 60);
+
+CREATE USER IF NOT EXISTS 'usuarioTienda'@'%' IDENTIFIED BY 'abcd1234';
+CREATE USER IF NOT EXISTS 'usuarioFull'@'%' IDENTIFIED BY 'abcd1234';
+
+GRANT SELECT, INSERT ON tiendavirtual.productos TO 'usuarioTienda'@'%';
+GRANT SELECT, INSERT, UPDATE, DELETE ON tiendavirtual.productos TO 'usuarioFull'@'%';
+
+FLUSH PRIVILEGES;
