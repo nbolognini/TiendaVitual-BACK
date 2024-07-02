@@ -8,12 +8,17 @@ CREATE TABLE IF NOT EXISTS productos (
     stock INT
 );
 
-INSERT INTO productos (nombre, precio, cantidad)
+INSERT INTO productos (nombre, precio, stock) 
 VALUES
-('campera', 1000.50, 2),
-('campera', 200.75, 3),
-('remera', 300.25, 34),
-('remera', 400.00, 60);
+('Remera', 1000.50, 2),
+('Pantalon', 200.75, 3),
+('Zapatillas', 300.25, 34),
+('Vestido', 400.00, 60),
+('Pollera', 400.00, 60),
+('Zapatos Mujer', 400.00, 60),
+('Campera', 400.00, 60),
+('Bermuda', 400.00, 60),
+('Buzo', 400.00, 60);
 
 CREATE USER IF NOT EXISTS 'usuarioTienda'@'%' IDENTIFIED BY 'abcd1234';
 CREATE USER IF NOT EXISTS 'usuarioFull'@'%' IDENTIFIED BY 'abcd1234';

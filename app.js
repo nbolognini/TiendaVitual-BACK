@@ -1,27 +1,20 @@
 
-const express = require('express'); // Paso 1: Importar Express
-const app = express(); // Crear instancia de la aplicación
+const express = require('express'); // 1) Importo Express
+const app = express(); //              2) Creo instancia de Express
 
+const mysql = require('mysql'); // 3) Importo módulo mysql para poder interactuar con bases de datos MySQL
 
-// Importamos el módulo mysql para poder interactuar con bases de datos MySQL
-const mysql = require('mysql');
-
-//habilitamos los cors
-const cors = require('cors');
+const cors = require('cors'); // 4)habilitamos los cors para no hay problemas de comunicacion entre el front y el back
 app.use(cors());
 
-
-
-// Creamos una conexión a la base de datos especificando los detalles de nuestra base de datos
-const connection = mysql.createConnection({
-    host: '192.168.0.38',     // Dirección del servidor de la base de datos
-    user: 'usuarioFull',          // Nombre de usuario para acceder a la base de datos
-    password: 'abcd1234',     // Contraseña del usuario
-    database: 'tiendavirtual' // Nombre de la base de datos a la que queremos conectarnos
+const connection = mysql.createConnection({ // 5) Creo conexión a la base de datos y configuro los datos de conexión
+    host: '192.168.0.38',   
+    user: 'usuarioFull',      
+    password: 'abcd1234',     
+    database: 'tiendavirtual' 
 });
 
-// puedo conssultar si se pudo conectar a la base de datos
-connection.connect((err) => {
+connection.connect((err) => { // consulto si se pudo conectar a la base de datos
     if (err) { // Si hay un error al conectar, lo mostramos en consola
         console.log('Error connecting to database');
         return; // Salimos de la función para evitar más ejecución
@@ -31,8 +24,7 @@ connection.connect((err) => {
 });
 
 
-// Paso 3: Crear endpoint GET `/productos`
-app.get('/productos', (req, res) => {
+app.get('/productos', (req, res) => { // 6) Crear endpoint GET `/productos`
     console.log('Intentando acceder a /productos');
 
     // Verificar el estado de la conexión
@@ -54,8 +46,7 @@ app.get('/productos', (req, res) => {
 });
 
 
-
-// Paso 6: Iniciar servidor
+// Paso 6: Iniciar servidor en puerto 3000
 const PORT = 3000; // Definir puerto
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
