@@ -10,7 +10,6 @@ const cors = require('cors'); // 4)habilitamos los cors para no hay problemas de
 app.use(cors());
 app.use(express.json());
 
-
 app.use(bodyParser.json());
 
 const connection = mysql.createConnection({ // 5) Creo conexión a la base de datos y configuro los datos de conexión
@@ -25,12 +24,12 @@ connection.connect((err) => { // consulto si se pudo conectar a la base de datos
         console.log('Error connecting to database');
         return; // Salimos de la función para evitar más ejecución
     }
-    // Si la conexión es exitosa, mostramos un mensaje en consola
+    // Si la conexión es exitosa, me da el ok
     console.log('Connection exitosa!');
 });
 
 
-app.get('/productos', (req, res) => { // 6) Crear endpoint GET `/productos`
+app.get('/productos', (req, res) => { // 6) Crear endpoint GET /productos para que me devulva todos los productos
     console.log('Intentando acceder a /productos');
 
     // Verificar el estado de la conexión
@@ -63,9 +62,8 @@ app.post('/guardarProductos', (req, res) => {
     // Acceder a la propiedad 'productos' del objeto recibido
     const productos = req.body.productos;
 
-    // cargo todo:
+    // cargo todo uno por uno con un forEach y lo meto a la base de datos:
     productos.forEach(producto => {
-        
         console.log(producto); // Depuración para verificar cada producto
         // Insertar el producto en la base de datos
         connection.query('INSERT INTO productos SET ?', producto, (err, result) => {
@@ -76,25 +74,16 @@ app.post('/guardarProductos', (req, res) => {
             }
             console.log('Producto insertado con éxito:', result.insertId);
         });
-
-
     });
-
     // Envía una respuesta al cliente
     res.status(201).send('Productos guardados con éxito');
 });
 
-
-// Paso 6: Iniciar servidor en puerto 3000
-const PORT = 3000; // Definir puerto
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
-
+//Elimino el producto con el id que llega desde Frontend
 app.delete('/eliminarProducto/:id', (req, res) => {
     const { id } = req.params;
-    // Aquí iría la lógica para verificar autenticación y autorización
-    // Luego, la validación del ID y la lógica de eliminación
+    // Aca habria que hacer una logica de validacion para que no pueda borrar cualquiera If...
+    // y luego seguir con la eliminacion del producto con el id que llega desde Frontend
     connection.query('DELETE FROM productos WHERE id = ?', [id], (err, result) => {
         if (err) {
             console.error('Error al eliminar el producto:', err);
@@ -107,4 +96,11 @@ app.delete('/eliminarProducto/:id', (req, res) => {
             res.status(200).send('Producto eliminado con éxito');
         }
     });
+});
+
+
+// Paso 6: Inicio servidor de NodeJs en puerto 3000
+const PORT = 3000; 
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
