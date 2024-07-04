@@ -8,7 +8,7 @@ const mysql = require('mysql'); // 3) Importo módulo mysql para poder interactu
 
 const cors = require('cors'); // 4)habilitamos los cors para no hay problemas de comunicacion entre el front y el back
 app.use(cors());
-app.use(express.json());
+app.use(express.json());  
 
 app.use(bodyParser.json());
 
