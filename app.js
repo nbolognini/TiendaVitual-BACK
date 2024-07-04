@@ -90,3 +90,21 @@ const PORT = 3000; // Definir puerto
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+app.delete('/eliminarProducto/:id', (req, res) => {
+    const { id } = req.params;
+    // Aquí iría la lógica para verificar autenticación y autorización
+    // Luego, la validación del ID y la lógica de eliminación
+    connection.query('DELETE FROM productos WHERE id = ?', [id], (err, result) => {
+        if (err) {
+            console.error('Error al eliminar el producto:', err);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        if (result.affectedRows === 0) {
+            res.status(404).send('Producto no encontrado');
+        } else {
+            res.status(200).send('Producto eliminado con éxito');
+        }
+    });
+});
