@@ -1,11 +1,17 @@
 
+
 const express = require('express'); // 1) Importo Express
 const app = express(); //              2) Creo instancia de Express
+const bodyParser = require('body-parser');
 
 const mysql = require('mysql'); // 3) Importo módulo mysql para poder interactuar con bases de datos MySQL
 
 const cors = require('cors'); // 4)habilitamos los cors para no hay problemas de comunicacion entre el front y el back
 app.use(cors());
+app.use(express.json());
+
+
+app.use(bodyParser.json());
 
 const connection = mysql.createConnection({ // 5) Creo conexión a la base de datos y configuro los datos de conexión
     host: '192.168.0.38',   
@@ -43,6 +49,39 @@ app.get('/productos', (req, res) => { // 6) Crear endpoint GET `/productos`
         console.log('Productos consultados con éxito:', rows.length);
         res.json(rows); // Enviar los productos como respuesta en formato JSON
     });
+});
+
+
+app.post('/guardarProductos', (req, res) => {
+    // Verificar el estado de la conexión a la base de datos
+    if (connection.state === 'disconnected') {
+        console.log('La conexión a la base de datos está cerrada.');
+        res.status(500).send('Internal Server Error: DB connection closed');
+        return;
+    }
+
+    // Acceder a la propiedad 'productos' del objeto recibido
+    const productos = req.body.productos;
+
+    // cargo todo:
+    productos.forEach(producto => {
+        
+        console.log(producto); // Depuración para verificar cada producto
+        // Insertar el producto en la base de datos
+        connection.query('INSERT INTO productos SET ?', producto, (err, result) => {
+            if (err) {
+                console.error('Error al insertar producto:', err); // Mostrar el error específico
+                res.status(500).send('Error al insertar producto');
+                return;
+            }
+            console.log('Producto insertado con éxito:', result.insertId);
+        });
+
+
+    });
+
+    // Envía una respuesta al cliente
+    res.status(201).send('Productos guardados con éxito');
 });
 
 
