@@ -83,6 +83,7 @@ app.post('/guardarProductos', (req, res) => {
 app.delete('/eliminarProducto/:id', (req, res) => {
     const { id } = req.params;
     // Aca habria que hacer una logica de validacion para que no pueda borrar cualquiera If...
+    
     // y luego seguir con la eliminacion del producto con el id que llega desde Frontend
     connection.query('DELETE FROM productos WHERE id = ?', [id], (err, result) => {
         if (err) {
